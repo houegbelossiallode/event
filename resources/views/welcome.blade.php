@@ -48,6 +48,7 @@
                                         >
                                             Register
                                         </a>
+                                       
                                     @endif
                                 @endauth
                             </nav>

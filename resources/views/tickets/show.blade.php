@@ -4,6 +4,6 @@
     
     <p>Code Du Ticket: {{ $ticketCode}}</p>
     <p>QR Code URL: {{ asset($ticket->qr_code_path) }}</p>
-    <img src="{{ asset($ticket->qr_code_path) }}" alt="QR Code pour le ticket">
+    <img src="{{ asset('qr_codes/14cE.png') }}" alt="QR Code pour le ticket">
     <a href="#" class="btn btn-primary">Retour à l'accueil</a>
 </div>

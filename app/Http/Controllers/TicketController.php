@@ -42,7 +42,7 @@ class TicketController extends Controller
         $pdf = Pdf::loadView('tickets.pdf', compact('ticket'));
 
         // Télécharger ou afficher le PDF
-        return $pdf->download('ticket_' . $ticket->id . '_qr_code.pdf');
+        return $pdf->download('tickets.pdf');
     }
 
 

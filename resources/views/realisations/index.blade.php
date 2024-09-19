@@ -28,6 +28,15 @@
                 <td>{{ $realisation->chiffre}}</td>
                 <td>{{ $realisation->nombre}}</td>
                 <td>{{ $realisation->date_realisation}}</td>
+                <td>
+                    <a href="{{ route('realisation.edit', $realisation->id) }}" class="btn btn-warning btn-sm">Modifier</a>
+
+                    <form action="{{ route('realisation.destroy', $realisation->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réalisation ?')">Supprimer</button>
+                    </form>
+                </td>
             </tr>
             @endforeach
         </tbody>

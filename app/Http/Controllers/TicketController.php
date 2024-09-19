@@ -39,7 +39,9 @@ class TicketController extends Controller
         }
 
         // Générer le PDF avec le QR code
-        $pdf = Pdf::loadView('tickets.pdf', compact('ticket'));
+        $pdf = Pdf::loadView('tickets.pdf', [
+            'ticket'=> $ticket
+        ]);
 
         // Télécharger ou afficher le PDF
         return $pdf->download('tickets.pdf');

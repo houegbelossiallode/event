@@ -10,7 +10,6 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\Label\Font\NotoSans;
 use Endroid\QrCode\Writer\PngWriter;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 
 class TicketController extends Controller
@@ -41,14 +40,9 @@ class TicketController extends Controller
 
         // Générer le PDF avec le QR code
         $pdf = Pdf::loadView('tickets.pdf', compact('ticket'));
-// Définir le nom du fichier PDF
-$filename = 'ticket_' . $ticket->id . '_qr_code.pdf';
 
-// Télécharger le PDF avec les headers appropriés
-return Response::make($pdf->output(), 200, [
-    'Content-Type' => 'application/pdf',
-    'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-]);
+        // Télécharger ou afficher le PDF
+        return $pdf->download('tickets.pdf');
     }
 
 

@@ -6,7 +6,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "barryvdh/laravel-dompdf": "^3.0",
         "endroid/qr-code": "^5.0",
         "fedapay/fedapay-php": "^0.4.2",
         "laravel/framework": "^11.0",

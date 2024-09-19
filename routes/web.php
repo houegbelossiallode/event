@@ -11,6 +11,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/realisations', [RealisationController::class, 'index'])->name('realisation.index');
+Route::get('/realisations/{id}/edit', [RealisationController::class, 'edit'])->name('realisation.edit');
+Route::put('/realisations/{id}', [RealisationController::class, 'update'])->name('realisation.update');
+Route::delete('/realisations/{id}', [RealisationController::class, 'destroy'])->name('realisation.destroy');
 Route::post('/import', [RealisationController::class, 'import'])->name('realisation.import');
 Route::get('/events', [EventController::class, 'index'])->name('event.index');
 Route::get('/tickets/liste/', [TicketController::class, 'liste'])->name('ticket.liste');

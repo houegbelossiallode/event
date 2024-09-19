@@ -33,6 +33,6 @@
         </tbody>
     </table>
 </div>
-nombre
+
 </body>
 </html>

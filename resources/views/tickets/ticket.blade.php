@@ -5,7 +5,7 @@
     <title>QR Code Vente {{ $ticket->id }}</title>
     <style>
         body {
-            font-family: DejaVu Sans, sans-serif;
+            font-family: sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
@@ -18,6 +18,6 @@
 <body>
     <h1>Ticket #{{ $ticket->id }}</h1>
     <p>Description: {{ $ticket->ticket_code}}</p>
-    
+
 </body>
 </html>

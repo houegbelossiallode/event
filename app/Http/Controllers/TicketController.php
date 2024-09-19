@@ -20,11 +20,11 @@ class TicketController extends Controller
         $tickets = Ticket::all();
 
         // Parcourir les tickets pour convertir le chemin des QR codes en base64
-        foreach ($tickets as $ticket) {
-            $qrCodePath = public_path('qr_codes/' . $ticket->qr_code_path); // Assurez-vous que le chemin est correct
-            $ticket->qr_code_base64 = $this->convertImageToBase64($qrCodePath);
-        }
-        $ticketCode = Str::random(4); // Générer un code unique pour le ticket
+      //  foreach ($tickets as $ticket) {
+      //      $qrCodePath = public_path('qr_codes/' . $ticket->qr_code_path); // Assurez-vous que le chemin est correct
+      //      $ticket->qr_code_base64 = $this->convertImageToBase64($qrCodePath);
+      //  }
+      //  $ticketCode = Str::random(4); // Générer un code unique pour le ticket
 
         // Passer les tickets à la vue
         return view('tickets.index', ['tickets' => $tickets]);
@@ -34,27 +34,27 @@ class TicketController extends Controller
     public function imprimer(Ticket $ticket)
     {
         // Vérifier si le QR code existe
-        if (!$ticket->qr_code) {
+        if (!$ticket->qr_code_path) {
             return redirect()->back()->with('error', 'Le QR code est introuvable.');
         }
-
+    //dd($ticket);
         // Générer le PDF avec le QR code
-        $pdf = Pdf::loadView('tickets.pdf', [
+        $pdf = Pdf::loadView('tickets.ticket', [
             'ticket'=> $ticket
         ]);
 
         // Télécharger ou afficher le PDF
-        return $pdf->download('tickets.pdf');
+        return $pdf->download('ticket.pdf');
     }
 
 
-    private function convertImageToBase64($path)
-    {
-        if (file_exists($path)) {
-            $imageData = file_get_contents($path);
-            $mimeType = mime_content_type($path);
-            return 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
-        }
-        return null;
-    }
+   // private function convertImageToBase64($path)
+   // {
+    //    if (file_exists($path)) {
+    //        $imageData = file_get_contents($path);
+    //        $mimeType = mime_content_type($path);
+   //         return 'data:' . $mimeType . ';base64,' . base64_encode($imageData);
+   //     }
+   //     return null;
+   // }
 }

@@ -28,7 +28,7 @@
                             Imprimer le QR code
                         </a>
                     </td>
-                    
+
 
                 </tr>
             @endforeach
@@ -36,6 +36,21 @@
 
         </tbody>
     </table>
+
+    @if(session('success'))
+    <p>{{ session('success') }}</p>
+@endif
+
+<form action="{{ route('realisation.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <label for="file">Sélectionner un fichier Excel :</label>
+    <input type="file" name="file" required>
+
+    <button type="submit">Importer</button>
+</form>
+
+
+
 </body>
 </html>
 

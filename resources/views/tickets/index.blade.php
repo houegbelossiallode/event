@@ -21,14 +21,22 @@
                     <td>{{ $ticket->event_name }}</td>
                     <td>{{ $ticket->ticket_code }}</td>
                     <td>
-                        @if ($ticket->qr_code_base64)
-                            <img src="{{ $ticket->qr_code_base64 }}" alt="QR Code" style="width: 100px; height: 100px;">
-                        
-                        @endif
+                            <img src="{{ asset($ticket->qr_code_path)}}" alt="QR Code" style="width: 100px; height: 100px;">
                     </td>
+                    <td>
+                        <a href="{{ route('tickets.imprimer', $ticket->id) }}" class="btn btn-primary">
+                            Imprimer le QR code
+                        </a>
+                    </td>
+                    
+
                 </tr>
             @endforeach
+
+
         </tbody>
     </table>
 </body>
 </html>
+
+

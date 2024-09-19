@@ -11,7 +11,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Auth;
 use FedaPay\Transaction;
 use Illuminate\Support\Facades\Http;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
@@ -22,7 +28,7 @@ class PaymentController extends Controller
         FedaPay::setApiKey(env('FEDAPAY_SECRET_KEY'));
         FedaPay::setEnvironment(env('FEDAPAY_SANDBOX') ? 'sandbox' : 'live');
     }
-    
+
 public function checkout(Request $request)
 {
     $event = Event::findOrFail($request->event_id);
@@ -40,14 +46,14 @@ public function checkout(Request $request)
 
     // Créer la transaction FedaPay
    // $transaction = Transaction::create([
-  //      'description' => 
+  //      'description' =>
   //      'amount' => // Montant en centimes
   //      'currency' => 'XOF',
  //       'callback_url' => route('payment.callback', ['orderId' => $order->id]), // URL de retour après paiement
  //       'customer' => [
  //           'firstname' => Auth::user()->name,
  //           'email' => Auth::user()->email,
-            
+
  //       ]
  //   ]);
  // Préparer les données pour FedaPay
@@ -56,9 +62,9 @@ public function checkout(Request $request)
      "currency" => ["iso" => "XOF"],
      'description' => "Commande pour l'événement " . $event->name,
      'callback_url' => route('payment.callback',['order_id'=>$order->id]),
-     
+
  ];
- 
+
  $transaction = \FedaPay\Transaction::create([
     'description' => $paymentData['description'],
     'amount' => $paymentData['amount'],
@@ -75,7 +81,7 @@ public function checkout(Request $request)
  // $transaction = Transaction::create(array());
  // $token = $transaction->generateToken();
  // return header('Location: ' . $token->url);
-   
+
 
 // Afficher la réponse brute pour débogage
 //if ($response->failed()) {
@@ -98,7 +104,7 @@ public function checkout(Request $request)
 return redirect()->to($token);
 
 
- 
+
 }
 
 
@@ -119,11 +125,21 @@ public function paymentCallback(Request $request)
 
 
          $ticketCode = Str::random(4); // Générer un code unique pour le ticket
-         $qrCodePath = 'qr_codes/' . $ticketCode . '.png';
-   
-         // Générer le QR Code
-         QrCode::size(300)->generate($ticketCode, public_path($qrCodePath));
-         // Créer un ticket pour l'utilisateur
+        // Générer le QR code pour cette vente
+        $result = Builder::create()
+        ->writer(new PngWriter())
+        ->data('code qr')
+        ->encoding(new Encoding('UTF-8'))
+        //->errorCorrectionLevel(new ErrorCorrectionLevelHigh)
+        ->size(300)
+        ->margin(10)
+        ->build();
+
+     // Sauvegarder l'image QR code dans le répertoire public
+    $qrCodePath = 'qr_codes/' . $ticketCode . '.png';
+    file_put_contents(public_path($qrCodePath), $result->getString());
+   // Storage::put('public/' . $qrCodePath, $result->getString());
+      // Créer un ticket pour l'utilisateur
          $ticket = Ticket::create([
                 'user_id' => $order->user_id,
                 'event_name' => $order->event->name,
@@ -132,7 +148,7 @@ public function paymentCallback(Request $request)
          ]);
 
           // Retourner la réponse, par exemple une vue avec le QR Code
-    return view('tickets.show', compact('ticketCode', 'ticket'));
+    return view('tickets.show', compact('ticketCode', 'ticket','result'));
      } else {
  // Rediriger en cas d'échec de paiement
        return redirect()->route('ticket.error')->with('error', 'Paiement non validé.');
@@ -179,9 +195,9 @@ public function success($id)
 
     public function error()
     {
-      
+
             return view('tickets.error');
-       
+
     }
 
 

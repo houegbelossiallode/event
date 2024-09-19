@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Event;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -12,23 +12,18 @@ class EventController extends Controller
 {
     public function index()
 {
-       // Event::create([
-       //     'name'=> 'Concert de Jazz',
-       //     'description'=>'Un concert de jazz avec des artistes locaux.',
-       //     'date'=> '2024-10-01',
-       //     'price'=> '15000.00',
-       //     'available_tickets'=> '100'
-      //  ]);
+       # 2. On génère un QR code de taille 200 x 200 px
+    	$qrcode = QrCode::size(110)->generate("Je suis un QR Code");
 
-       
+
     $events = Event::all(); // Récupérer tous les événements
-    return view('events.index', compact('events'));
+    return view('events.index', compact('events','qrcode'));
 }
 
 
 
 
-  
+
 
 
 

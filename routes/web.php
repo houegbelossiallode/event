@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/realisations', [RealisationController::class, 'index'])->name('realisation.index');
 Route::post('/import', [RealisationController::class, 'import'])->name('realisation.import');
 Route::get('/events', [EventController::class, 'index'])->name('event.index');
 Route::get('/tickets/liste/', [TicketController::class, 'liste'])->name('ticket.liste');

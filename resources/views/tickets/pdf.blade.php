@@ -18,8 +18,6 @@
 <body>
     <h1>Ticket #{{ $ticket->id }}</h1>
     <p>Description: {{ $ticket->ticket_code}}</p>
-    <div class="qr-code">
-        <img src="{{ asset($ticket->qr_code_path) }}" alt="QR Code">
-    </div>
+    
 </body>
 </html>
